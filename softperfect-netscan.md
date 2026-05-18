@@ -14,6 +14,7 @@ DeviceProcessEvents
     or ProcessVersionInfoFileDescription has "scanning networks"
     or ProcessCommandLine has_all ("/hide", "/auto")
 | project
+    Timestamp,
     FileName,
     SHA256,
     ProcessVersionInfoProductName,
@@ -21,7 +22,6 @@ DeviceProcessEvents
     ProcessVersionInfoCompanyName,
     ProcessCommandLine,
     InitiatingProcessFileName,
-    InitiatingProcessCommandLine,
-    Timestamp
+    InitiatingProcessCommandLine
 | sort by Timestamp asc
 ```
