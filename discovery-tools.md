@@ -75,7 +75,7 @@ DeviceFileEvents
        InitiatingProcessCommandLine, InitiatingProcessParentFileName
 | order by FirstDrop asc
 ```
-## ESQL (Elastic)
+## ES|QL (Elastic)
 Same logic, Elastic field names. 
 
 ### Process events

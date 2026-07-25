@@ -1,5 +1,5 @@
 Read this article for more background on the hunt KQL and ES|QL queries below:
-https://securityinbits.substack.com/p/detecting-reverse-ssh-socks-tunnels
+https://newsletter.securityinbits.com/p/detecting-reverse-ssh-socks-tunnels
 
 # From Sigma Logic
 ## KQL (MDE, DeviceProcessEvents)

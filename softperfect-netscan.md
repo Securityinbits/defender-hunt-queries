@@ -6,6 +6,8 @@ Detection idea:
 
 /auto: = scan + XML output
 
+## KQL (MDE, DeviceProcessEvents)
+
 ```kusto
 DeviceProcessEvents
 | where Timestamp > ago(30d)
