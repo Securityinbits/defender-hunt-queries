@@ -1,0 +1,3 @@
+# Generated flat view of the queries (rebuild with: uv run extract_queries.py)
+extracted/
+*.py
