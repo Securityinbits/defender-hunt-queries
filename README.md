@@ -19,7 +19,7 @@ language-first, on purpose.
 | `discovery-tools.md` | SoftPerfect NetScan, Advanced IP/Port Scanner (process / network / file events) |
 | `softperfect-netscan.md` | SoftPerfect NetScan, focused process detection |
 | `ssh-tunnel.md` | Reverse SSH SOCKS tunnel (`ssh -R`) detection + the aggregation tell |
-| `screenconnect.md` | ScreenConnect RMM abuse: vendor-signed client (match identity not trust), delivery provenance (`FileOriginUrl`), relay classifier (cloud 443 vs self-hosted 8041), EID 7045 service + the Elastic rules that fired |
+| `screenconnect.md` | ScreenConnect RMM abuse: download origin (`FileOriginUrl`), vendor-signed client (match identity not trust), relay classifier (cloud 443 vs self-hosted 8041), the `e=Access` unattended-access launch string + the 3 SigmaHQ rules that fired |
 
 ## Convention (keeps the dual-stack files machine-extractable)
 
