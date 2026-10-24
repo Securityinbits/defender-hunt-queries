@@ -46,7 +46,8 @@ is the row that should stop you. Surfaces the lure filenames.
 ```kusto
 DeviceProcessEvents
 | where Timestamp > ago(30d)
-| where ProcessVersionInfoCompanyName == "AnyDesk Software GmbH" or ProcessVersionInfoProductName == "AnyDesk"
+// version info is attacker-controlled: match case-insensitively (=~)
+| where ProcessVersionInfoCompanyName =~ "AnyDesk Software GmbH" or ProcessVersionInfoProductName =~ "AnyDesk"
 | summarize FirstSeen=min(Timestamp), LastSeen=max(Timestamp), Hosts=dcount(DeviceId),
             HostList=make_set(DeviceName,10), Users=make_set(AccountName,10)
     by FileName
