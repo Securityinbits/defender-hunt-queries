@@ -79,7 +79,50 @@ DeviceProcessEvents
 | project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName
 ```
 
-## 5. SigmaHQ rules that fired
+## 5. Count the services (MDE)
+
+Each ScreenConnect client installs its own `ScreenConnect Client (<thumbprint>)` service, one per
+server that owns the host. More than one on a host you did not deploy = more than one server owns
+it, or one client was upgraded from a support session to unattended access (that shape is published,
+not lab-observed). Section 4's launch string tells them apart: two different `h=` relays = two servers.
+In the lab, sample 2 alone left two on one host, nine minutes apart: the cloud client, then the
+self-hosted one its operator pushed. (A third row in the lab data is sample 1, an earlier run on
+the same host that was rolled back before sample 2.)
+
+### KQL (MDE) - 30-day hunt, hosts with more than one ScreenConnect client service
+
+```kusto
+// More than one ScreenConnect service on one host = more than one server owns it (or a support-to-access upgrade)
+let lookback = 30d;
+DeviceEvents
+| where Timestamp > ago(lookback)
+| where ActionType == "ServiceInstalled"
+| extend Svc = tostring(parse_json(AdditionalFields).ServiceName)
+| where Svc startswith "ScreenConnect Client"
+| summarize Services = dcount(Svc), ServiceNames = make_set(Svc, 10),
+            FirstInstall = min(Timestamp), LastInstall = max(Timestamp) by DeviceId, DeviceName
+| where Services > 1
+```
+
+## 6. The operator's shell (MDE)
+
+`ScreenConnect.WindowsBackstageShell.exe` is the hidden session an operator opens behind the
+user's desktop, spawned by the client service as SYSTEM. In the lab it started once per live
+operator session: in sample 2 from the cloud client, 4 minutes after it landed and before the operator
+pushed the self-hosted one; in sample 4 from the self-hosted client, under 2 minutes after install.
+
+### KQL (MDE) - 30-day hunt, Backstage shell launch
+
+```kusto
+// The operator's hidden shell, spawned by the ScreenConnect service
+let lookback = 30d;
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where FileName =~ "ScreenConnect.WindowsBackstageShell.exe"
+| project Timestamp, DeviceName, InitiatingProcessFileName, FileName, AccountName, ProcessCommandLine
+```
+
+## 7. SigmaHQ rules that fired
 
 Confirmed with [Hayabusa](https://github.com/Yamato-Security/hayabusa) against the sample-2 evtx,
 offline rather than in the live SIEM.
