@@ -19,8 +19,11 @@ a portable RMM tool has no business running.
 ### KQL (MDE) - 1-day detection
 
 ```kusto
+// Live tenant: last 1 day. Case-05 bundle: datetime(2026-06-26) .. datetime(2026-06-27)
+let StartTime = ago(1d);
+let EndTime = now();
 DeviceProcessEvents
-| where Timestamp > ago(1d)
+| where Timestamp between (StartTime .. EndTime)
 // rename-proof AnyDesk identity (OriginalFileName is EMPTY for AnyDesk - do NOT use it)
 | where ProcessVersionInfoCompanyName =~ "AnyDesk Software GmbH"
     or ProcessVersionInfoProductName =~ "AnyDesk"
@@ -44,8 +47,11 @@ is the row that should stop you. Surfaces the lure filenames.
 ### KQL (MDE) - 30-day hunt
 
 ```kusto
+// Live tenant: last 30 days. Case-05 bundle: datetime(2026-06-26) .. datetime(2026-06-27)
+let StartTime = ago(30d);
+let EndTime = now();
 DeviceProcessEvents
-| where Timestamp > ago(30d)
+| where Timestamp between (StartTime .. EndTime)
 // version info is attacker-controlled: match case-insensitively (=~)
 | where ProcessVersionInfoCompanyName =~ "AnyDesk Software GmbH" or ProcessVersionInfoProductName =~ "AnyDesk"
 | summarize FirstSeen=min(Timestamp), LastSeen=max(Timestamp), Hosts=dcount(DeviceId),
@@ -71,8 +77,11 @@ If you do not deploy AnyDesk at all, there is nothing to baseline.
 ### KQL (MDE) - 1-day detection
 
 ```kusto
+// Live tenant: last 1 day. Case-05 bundle: datetime(2026-06-26) .. datetime(2026-06-27)
+let StartTime = ago(1d);
+let EndTime = now();
 DeviceProcessEvents
-| where Timestamp > ago(1d)
+| where Timestamp between (StartTime .. EndTime)
 | where ProcessCommandLine contains "--set-password"
     or (InitiatingProcessCommandLine contains "set-password" and InitiatingProcessCommandLine has "echo")
 | project Timestamp, DeviceId, ReportId, DeviceName, AccountName, FileName,
@@ -91,8 +100,11 @@ Baseline once; any unsanctioned host reaching it is a lead. Relays rotate per se
 ### KQL (MDE) - 1-day detection, relay-only
 
 ```kusto
+// Live tenant: last 1 day. Case-05 bundle: datetime(2026-06-26) .. datetime(2026-06-27)
+let StartTime = ago(1d);
+let EndTime = now();
 DeviceNetworkEvents
-| where Timestamp > ago(1d)
+| where Timestamp between (StartTime .. EndTime)
 | where RemoteUrl contains "net.anydesk.com"
 | project Timestamp, DeviceId, ReportId, DeviceName, InitiatingProcessFileName, InitiatingProcessFolderPath,
           RemoteUrl, RemoteIP, RemotePort
@@ -101,8 +113,11 @@ DeviceNetworkEvents
 ### KQL (MDE) - 10-day wide variant (also catches the `download.anydesk.com` staging pull)
 
 ```kusto
+// Live tenant: last 10 days. Case-05 bundle: datetime(2026-06-26) .. datetime(2026-06-27)
+let StartTime = ago(10d);
+let EndTime = now();
 DeviceNetworkEvents
-| where Timestamp > ago(10d)
+| where Timestamp between (StartTime .. EndTime)
 | where RemoteUrl endswith ".anydesk.com" // or net.anydesk.com
 | project Timestamp, DeviceId, ReportId, DeviceName, InitiatingProcessFileName, InitiatingProcessFolderPath,
           RemoteUrl, RemoteIP, RemotePort
@@ -125,8 +140,11 @@ for the same IP is `ad.trace`'s `Logged in from` line on the host.
 ### KQL (MDE) 
 
 ```kusto
+// Live tenant: last 1 day. Case-05 bundle: datetime(2026-06-26) .. datetime(2026-06-27)
+let StartTime = ago(1d);
+let EndTime = now();
 DeviceNetworkEvents
-| where Timestamp > ago(1d)
+| where Timestamp between (StartTime .. EndTime)
 | where InitiatingProcessVersionInfoCompanyName =~ "AnyDesk Software GmbH" or InitiatingProcessVersionInfoProductName =~ "AnyDesk"
 | where ActionType == "ConnectionFailed"
 | where not(ipv4_is_private(RemoteIP))   // public only
