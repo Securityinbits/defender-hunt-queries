@@ -2,7 +2,7 @@
 
 Query reference for the newsletter issue **"ScreenConnect RMM Abuse: The Cloud Client Gets In,
 The Self-Hosted One Stays"**. The reasoning, lab evidence and caveats are in the issue:
-[newsletter.securityinbits.com](https://newsletter.securityinbits.com)
+[newsletter.securityinbits.com/p/screenconnect-rmm-abuse-the-cloud](https://newsletter.securityinbits.com/p/screenconnect-rmm-abuse-the-cloud)
 
 Lab-validated on two real ConnectWise-signed samples detonated on a live host and back-filled
 against MDE + Elastic. Every query is a 30-day hunt via `let lookback = 30d`; drop it to `1d` for

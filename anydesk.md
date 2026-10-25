@@ -1,7 +1,7 @@
 # AnyDesk - hunt it by behavior
 
 KQL queries from the newsletter issue **"32 Ransomware Groups Abuse AnyDesk. Your EDR Sees a
-Legit Tool"** https://newsletter.securityinbits.com
+Legit Tool"**: [newsletter.securityinbits.com/p/32-ransomware-groups-abuse-anydesk](https://newsletter.securityinbits.com/p/32-ransomware-groups-abuse-anydesk)
 
 All lab-validated on real MDE telemetry against both AnyDesk delivery paths: the **attended
 portable** run (renamed binary in `%TEMP%`, victim clicks Accept) and the **unattended
