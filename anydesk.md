@@ -22,9 +22,9 @@ a portable RMM tool has no business running.
 DeviceProcessEvents
 | where Timestamp > ago(1d)
 // rename-proof AnyDesk identity (OriginalFileName is EMPTY for AnyDesk - do NOT use it)
-| where ProcessVersionInfoCompanyName == "AnyDesk Software GmbH"
-    or ProcessVersionInfoProductName == "AnyDesk"
-    or ProcessVersionInfoFileDescription == "AnyDesk"
+| where ProcessVersionInfoCompanyName =~ "AnyDesk Software GmbH"
+    or ProcessVersionInfoProductName =~ "AnyDesk"
+    or ProcessVersionInfoFileDescription =~ "AnyDesk"
 | where FolderPath contains @"\Users\" or FolderPath contains @"\Downloads\"
     or FolderPath contains @"\AppData\" or FolderPath contains @"\Temp\"
     or FolderPath contains @"\ProgramData\" or FolderPath contains @"\Public\"
@@ -127,7 +127,7 @@ for the same IP is `ad.trace`'s `Logged in from` line on the host.
 ```kusto
 DeviceNetworkEvents
 | where Timestamp > ago(1d)
-| where InitiatingProcessVersionInfoCompanyName == "AnyDesk Software GmbH" or InitiatingProcessVersionInfoProductName == "AnyDesk"
+| where InitiatingProcessVersionInfoCompanyName =~ "AnyDesk Software GmbH" or InitiatingProcessVersionInfoProductName =~ "AnyDesk"
 | where ActionType == "ConnectionFailed"
 | where not(ipv4_is_private(RemoteIP))   // public only
 | where isempty(RemoteUrl) or RemoteUrl !endswith ".anydesk.com"   // not an AnyDesk relay FQDN
